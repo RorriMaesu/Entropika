@@ -1,0 +1,2726 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #121212;
+    color: #f0f0f0;
+    overflow: hidden;
+    position: relative;
+}
+
+/* Device and orientation-specific base styles */
+body.desktop-device {
+    /* Desktop-specific styles */
+}
+
+/* Desktop-specific logo and title styles */
+body.desktop-device .logo-container {
+    margin-top: 20px; /* Reduced space above logo */
+    margin-bottom: 0.5rem; /* Less space below logo */
+}
+
+body.desktop-device #game-logo {
+    width: auto;
+    max-width: 200px;
+}
+
+/* Button container for side-by-side buttons */
+.button-container {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+/* Desktop-specific button layout */
+body.desktop-device .button-container {
+    margin-bottom: 15px;
+}
+
+body.desktop-device .button-container button {
+    display: inline-block;
+    width: auto;
+    min-width: 150px;
+    margin-top: 10px;
+    font-size: 1rem;
+    padding: 10px 15px;
+}
+
+/* Mobile-specific button layout */
+body.mobile-device .button-container {
+    flex-direction: column;
+    align-items: center;
+}
+
+body.mobile-device .button-container button {
+    width: 80%;
+    max-width: 200px;
+    margin-top: 10px;
+}
+
+/* Mobile portrait tutorial button */
+body.mobile-device.portrait-mode #tutorialButton-mobile {
+    margin-top: 0.3rem;
+    width: 70%;
+    max-width: 180px;
+    font-size: 0.85rem;
+    padding: 6px 12px;
+}
+
+body.desktop-device #startScreen h1 {
+    font-size: 2rem;
+    margin-bottom: 0.3rem;
+}
+
+body.desktop-device #startScreen .tagline {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+}
+
+body.mobile-device {
+    /* Mobile-specific styles */
+}
+
+body.portrait-mode {
+    /* Default styles are for portrait */
+}
+
+body.landscape-mode {
+    /* Landscape-specific base styles */
+}
+
+/* Combined device and orientation styles */
+body.mobile-device.portrait-mode {
+    /* Mobile portrait specific styles */
+}
+
+body.mobile-device.landscape-mode {
+    /* Mobile landscape specific styles */
+    overflow-y: hidden; /* Prevent scrolling in landscape mode */
+}
+
+/* Mobile landscape tutorial button positioning */
+body.mobile-device.landscape-mode #tutorialButton-mobile {
+    position: relative;
+    display: block;
+    width: 90%;
+    margin: 3px auto 0;
+    font-size: 0.8rem;
+    padding: 4px 8px;
+    max-width: none;
+}
+
+body.desktop-device.portrait-mode {
+    /* Desktop portrait specific styles (rare) */
+}
+
+body.desktop-device.landscape-mode {
+    /* Desktop landscape specific styles (common) */
+}
+
+.container {
+    display: flex;
+    height: 100vh;
+}
+
+canvas {
+    display: block;
+    background-color: #000;
+    flex-grow: 1;
+}
+
+.controls {
+    width: 300px;
+    padding: 20px;
+    background-color: #1e1e1e;
+    overflow-y: auto;
+    border-left: 1px solid #333;
+}
+
+h1, h2, h3 {
+    margin-bottom: 20px;
+    text-align: center;
+    color: #4fc3f7;
+}
+
+h1 {
+    font-size: 2.5rem; /* Default font size */
+    margin-bottom: 0.2rem; /* Minimal space after title */
+    text-shadow: 0 0 15px rgba(79, 195, 247, 0.7);
+}
+
+.control-group {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+input[type="range"] {
+    width: 100%;
+    margin-bottom: 5px;
+}
+
+select {
+    width: 100%;
+    padding: 8px;
+    background-color: #333;
+    color: #fff;
+    border: 1px solid #555;
+    border-radius: 4px;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 20px;
+    background-color: #4fc3f7;
+    color: #000;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+    font-size: 1rem;
+}
+
+button:hover {
+    background-color: #81d4fa;
+    transform: scale(1.05);
+}
+
+/* Game overlay styles */
+#gameOverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    pointer-events: none;
+}
+
+.tagline {
+    font-size: 1.2rem; /* Default font size */
+    margin-bottom: 1rem; /* Space after tagline */
+    color: #81d4fa;
+    font-style: italic;
+    text-shadow: 0 0 8px rgba(129, 212, 250, 0.5); /* Added subtle text shadow */
+}
+
+.screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 20;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s;
+    padding-top: 20px;
+    overflow-y: auto;
+}
+
+body.mobile-device.portrait-mode .screen {
+    padding-top: 5px;
+    overflow-y: hidden; /* Prevent scrolling */
+}
+
+body.mobile-device.landscape-mode .screen {
+    padding: 5px 10px;
+    overflow-y: hidden;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+body.desktop-device .screen {
+    padding-top: 40px;
+}
+
+.screen.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.screen button {
+    max-width: 200px;
+}
+
+/* Logo styles */
+.logo-container {
+    text-align: center;
+    margin-bottom: 1rem; /* Increased space between logo and title */
+}
+
+#game-logo {
+    max-width: 250px; /* Default size */
+    width: auto; /* Auto width */
+    height: auto;
+    margin-bottom: 0.5rem; /* Space after logo */
+    filter: drop-shadow(0 0 10px rgba(79, 195, 247, 0.7));
+}
+
+/* Mobile logo styles */
+body.mobile-device #game-logo {
+    max-width: 200px;
+    margin-bottom: 0.5rem;
+}
+
+body.mobile-device.landscape-mode #game-logo {
+    max-width: 150px;
+    margin-bottom: 0.3rem;
+}
+
+.instructions {
+    margin-top: 2rem;
+    text-align: center;
+    max-width: 600px;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 1.5rem;
+    border-radius: 10px;
+    border: 1px solid #333;
+}
+
+/* Desktop-specific instructions box */
+body.desktop-device .instructions {
+    max-width: 700px;
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    padding: 1.5rem;
+    background-color: rgba(0, 0, 0, 0.7);
+    border: 2px solid #4fc3f7;
+    box-shadow: 0 0 20px rgba(79, 195, 247, 0.3);
+    margin-top: 0.5rem;
+    overflow-y: auto;
+    max-height: 55vh;
+    border-radius: 15px;
+}
+
+body.desktop-device .instructions h3 {
+    text-align: center;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+    font-size: 1.3rem;
+    color: #4fc3f7;
+}
+
+body.desktop-device .instructions p {
+    margin: 0.4rem 0;
+    line-height: 1.5;
+}
+
+body.desktop-device .desktop-only {
+    margin-bottom: 0.5rem;
+}
+
+.instructions h3 {
+    color: #81d4fa;
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+    font-size: 1.2rem;
+}
+
+.instructions p {
+    margin: 0.5rem 0;
+    line-height: 1.6;
+}
+
+.key {
+    display: inline-block;
+    background-color: #333;
+    border: 1px solid #555;
+    border-radius: 4px;
+    padding: 2px 8px;
+    margin: 0 2px;
+    font-family: monospace;
+    font-weight: bold;
+    color: #fff;
+    box-shadow: 0 2px 0 #222;
+}
+
+.green-dot, .red-dot, .blue-dot, .yellow-dot, .dust-dot {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-right: 8px;
+}
+
+.green-dot {
+    background-color: #81c784;
+    box-shadow: 0 0 8px #81c784;
+}
+
+.red-dot {
+    background-color: #e57373;
+    box-shadow: 0 0 8px #e57373;
+}
+
+.blue-dot {
+    background-color: #64b5f6;
+    box-shadow: 0 0 8px #64b5f6;
+}
+
+.yellow-dot {
+    background-color: #fff176;
+    box-shadow: 0 0 8px #fff176;
+}
+
+.dust-dot {
+    background-color: #a5d6a7;
+    box-shadow: 0 0 4px #a5d6a7;
+    width: 8px; /* Smaller dot for dust */
+    height: 8px;
+}
+
+/* Device-specific display rules */
+body.desktop-device .mobile-only,
+body.desktop-device .desktop-hidden {
+    display: none;
+}
+
+body.mobile-device .desktop-only,
+body.mobile-device .mobile-hidden {
+    display: none;
+}
+
+/* UI transparency for mobile when player is near UI */
+body.mobile-device #hud.player-nearby,
+body.mobile-device #ability-buttons.player-nearby {
+    opacity: 0.2;
+    transition: opacity 0.3s ease;
+}
+
+body.mobile-device #hud,
+body.mobile-device #ability-buttons {
+    opacity: 0.85;
+    transition: opacity 0.3s ease;
+}
+
+/* HUD styles */
+#hud {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    right: 20px;
+    z-index: 15;
+    pointer-events: none; /* HUD itself doesn't receive events */
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.2rem;
+    text-shadow: 0 0 5px #000;
+}
+
+#game-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #333;
+    max-width: 250px;
+}
+
+#energyBarContainer {
+    width: 100%;
+    height: 10px;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 5px;
+    overflow: hidden;
+    margin: 5px 0;
+    border: 1px solid #333;
+}
+
+/* Mobile-specific energy bar styling */
+body.mobile-device #energyBarContainer {
+    height: 8px;
+    margin: 3px 0;
+    box-shadow: 0 0 5px rgba(129, 199, 132, 0.5);
+}
+
+#energyBar {
+    height: 100%;
+    width: 0%;
+    background-color: #81c784;
+    transition: width 0.3s ease, background-color 0.3s ease;
+    position: relative;
+}
+
+#energyBar:hover::after {
+    content: attr(data-energy) ' energy';
+    position: absolute;
+    top: -25px;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 3px 6px;
+    border-radius: 3px;
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+/* Particle progress bar */
+.progress-container {
+    display: flex;
+    align-items: center;
+    margin: 5px 0;
+    flex-wrap: wrap;
+}
+
+.progress-label {
+    margin-right: 10px;
+    font-weight: bold;
+    color: #fff;
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+    min-width: 80px;
+}
+
+.progress-bar-container {
+    flex-grow: 1;
+    height: 10px;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 5px;
+    overflow: hidden;
+    border: 1px solid #333;
+    margin-right: 10px;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    width: 0%;
+    background-color: #81c784;
+    border-radius: 5px;
+    transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+.progress-text {
+    font-weight: bold;
+    color: #fff;
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+    min-width: 50px;
+    text-align: right;
+}
+
+#hud > div {
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 8px 12px;
+    border-radius: 5px;
+    border: 1px solid #333;
+}
+
+#score {
+    color: #81c784;
+}
+
+#level {
+    color: #64b5f6;
+}
+
+#lives {
+    color: #fff176;
+}
+
+#abilities {
+    display: flex;
+    gap: 15px;
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #333;
+}
+
+.ability {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #333;
+    position: relative;
+    min-width: 70px;
+}
+
+.ability-label {
+    font-size: 0.8rem;
+    margin-bottom: 5px;
+    color: #fff;
+    text-align: center;
+    font-weight: bold;
+}
+
+.cooldown {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #4fc3f7;
+    position: relative;
+    overflow: hidden;
+}
+
+.cooldown::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: var(--cooldown-percent, 100%);
+    background-color: rgba(0, 0, 0, 0.7);
+    transform-origin: center bottom;
+    transition: height 0.1s linear;
+}
+
+.cooldown.active::before {
+    /* Height is controlled by the --cooldown-percent CSS variable */
+}
+
+/* Weapon duration indicator */
+.duration {
+    position: relative;
+    display: block;
+    width: 30px;
+    height: 5px;
+    background-color: rgba(0, 0, 0, 0.7);
+    border-radius: 2px;
+    margin-top: 5px;
+    overflow: hidden;
+}
+
+.duration::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: var(--duration-percent, 0%);
+    height: 100%;
+    background-color: #9c27b0;
+    transition: width 0.1s linear;
+}
+
+.duration.active {
+    background-color: rgba(156, 39, 176, 0.3);
+}
+
+/* Ability energy meters */
+.ability-energy-container {
+    width: 40px;
+    height: 5px;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 2px;
+    margin-top: 5px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.ability-energy {
+    height: 100%;
+    width: 0%; /* Will be set by JS */
+    transition: width 0.3s ease;
+}
+
+#shieldPulseEnergy {
+    background-color: #2196f3;
+}
+
+#attractFieldEnergy {
+    background-color: #9c27b0;
+}
+
+#attractField {
+    background-color: rgba(156, 39, 176, 0.2);
+    border: 1px solid #9c27b0;
+}
+
+#weaponAbility {
+    background-color: rgba(156, 39, 176, 0.2);
+    border: 1px solid #9c27b0;
+    display: none;
+}
+
+#weaponAbility.active {
+    display: flex;
+}
+
+.energy-cost {
+    color: #e57373;
+    font-weight: bold;
+}
+
+.charge-display {
+    color: #64b5f6;
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+#warpBoost {
+    background-color: rgba(100, 181, 246, 0.2);
+    border: 1px solid #64b5f6;
+}
+
+#warpBoost.active {
+    background-color: rgba(100, 181, 246, 0.4);
+    box-shadow: 0 0 10px #64b5f6;
+}
+
+/* Tutorial styles */
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 30;
+    display: none;
+}
+
+.overlay.active {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#tutorial {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 30;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    pointer-events: auto;
+}
+
+#tutorialContent {
+    background-color: rgba(30, 30, 30, 0.95);
+    border-radius: 10px;
+    padding: 2rem;
+    width: 90%;
+    max-width: 600px;
+    text-align: center;
+    border: 2px solid #4fc3f7;
+    box-shadow: 0 0 30px rgba(79, 195, 247, 0.5);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 40;
+    pointer-events: auto;
+}
+
+.tutorial-step {
+    display: none;
+    position: relative;
+    z-index: 50;
+    pointer-events: auto;
+}
+
+.tutorial-step.active {
+    display: block;
+}
+
+#tutorialProgress {
+    margin-top: 1.5rem;
+    color: #aaa;
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+.tutorial-step h2 {
+    color: #4fc3f7;
+    margin-bottom: 1rem;
+}
+
+.tutorial-step p {
+    margin-bottom: 1rem;
+    line-height: 1.6;
+}
+
+.tutorial-controls {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2rem;
+    position: relative;
+    z-index: 100;
+    pointer-events: auto;
+}
+
+.tutorial-controls div {
+    width: 100px; /* Space for the empty div in the first step */
+}
+
+.tutorial-step button {
+    background-color: #4fc3f7;
+    color: #000;
+    border: none;
+    border-radius: 4px;
+    padding: 12px 30px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 120px;
+    position: relative;
+    z-index: 100;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    pointer-events: auto;
+}
+
+.tutorial-step button:hover {
+    background-color: #81d4fa;
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(79, 195, 247, 0.7);
+}
+
+.tutorial-step button:active {
+    transform: scale(0.98);
+    background-color: #29b6f6;
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.3);
+}
+
+.tutorial-image {
+    width: 100%;
+    height: 200px;
+    margin: 1rem 0;
+    background-color: #333;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.tutorial-image::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    opacity: 0.8;
+}
+
+.tutorial-image.movement::before {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="20" fill="white"/><path d="M50 20 L60 40 L40 40 Z" fill="white"/><path d="M50 80 L60 60 L40 60 Z" fill="white"/><path d="M20 50 L40 60 L40 40 Z" fill="white"/><path d="M80 50 L60 60 L60 40 Z" fill="white"/></svg>');
+}
+
+.tutorial-image.energy::before {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="20" fill="white"/><circle cx="30" cy="30" r="10" fill="%2381c784"/><circle cx="70" cy="30" r="10" fill="%2381c784"/><circle cx="30" cy="70" r="10" fill="%2381c784"/><circle cx="70" cy="70" r="10" fill="%2381c784"/></svg>');
+}
+
+.tutorial-image.enemies::before {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="20" fill="white"/><circle cx="20" cy="20" r="10" fill="%23e57373"/><circle cx="80" cy="20" r="10" fill="%23e57373"/><circle cx="20" cy="80" r="10" fill="%23e57373"/><circle cx="80" cy="80" r="10" fill="%23e57373"/></svg>');
+}
+
+.tutorial-image.abilities::before {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="20" fill="white"/><circle cx="50" cy="50" r="35" fill="none" stroke="%234fc3f7" stroke-width="3" stroke-dasharray="10 5"/><path d="M20 50 L40 40 L40 60 Z" fill="%234fc3f7"/><path d="M80 50 L60 40 L60 60 Z" fill="%234fc3f7"/><path d="M50 20 L40 40 L60 40 Z" fill="%234fc3f7"/><path d="M50 80 L40 60 L60 60 Z" fill="%234fc3f7"/></svg>');
+}
+
+.tutorial-image.powerups::before {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="20" fill="white"/><circle cx="25" cy="50" r="10" fill="%2364b5f6"/><circle cx="75" cy="50" r="10" fill="%23fff176"/></svg>');
+}
+
+/* Physics effects */
+.particle-effect {
+    position: absolute;
+    pointer-events: none;
+    z-index: 5;
+}
+
+.shield-pulse {
+    border-radius: 50%;
+    border: 2px solid #4fc3f7;
+    box-shadow: 0 0 20px #4fc3f7;
+    animation: pulse 1s ease-out;
+}
+
+/* Partial energy effect for shield pulse */
+.shield-pulse.partial-energy {
+    border: 1px solid #81d4fa;
+    box-shadow: 0 0 10px #81d4fa;
+    opacity: 0.8;
+}
+
+.attract-field {
+    border-radius: 50%;
+    border: 3px dashed #9c27b0;
+    box-shadow: 0 0 30px #9c27b0;
+    animation: attract-pulse 2s ease-out infinite;
+    /* Add lines pointing inward to emphasize tractor beam effect */
+    background-image: radial-gradient(circle, rgba(156, 39, 176, 0.5) 20%, rgba(156, 39, 176, 0.2) 50%, transparent 80%);
+    will-change: transform, opacity; /* Hardware acceleration hint */
+}
+
+/* Mobile-optimized attract field for better performance */
+.attract-field.mobile-optimized {
+    border: 2px dashed #9c27b0;
+    box-shadow: 0 0 15px #9c27b0;
+    animation: attract-pulse 1.5s ease-out infinite; /* Faster animation */
+    /* Simpler gradient with fewer color stops */
+    background-image: radial-gradient(circle, rgba(156, 39, 176, 0.4) 30%, transparent 70%);
+}
+
+/* Partial energy effect for attract field */
+.attract-field.partial-energy {
+    border: 2px dashed #ce93d8;
+    box-shadow: 0 0 15px #ce93d8;
+    opacity: 0.7;
+    background-image: radial-gradient(circle, rgba(206, 147, 216, 0.2) 20%, rgba(206, 147, 216, 0.05) 50%, transparent 80%);
+}
+
+/* Mobile-optimized partial energy effect */
+.attract-field.mobile-optimized.partial-energy {
+    border: 1px dashed #ce93d8;
+    box-shadow: 0 0 10px #ce93d8;
+    opacity: 0.6;
+    /* Even simpler gradient */
+    background-image: radial-gradient(circle, rgba(206, 147, 216, 0.2) 30%, transparent 70%);
+}
+
+/* Mobile-only ability button ready indicator */
+@media (max-width: 768px) {
+    /* Ready state for repulsor button */
+    #repulsor-button.ready {
+        animation: repulsor-ready 1.5s infinite;
+        opacity: 1 !important; /* Always fully visible when ready */
+    }
+
+    @keyframes repulsor-ready {
+        0% { box-shadow: 0 0 10px rgba(79, 195, 247, 0.7); transform: scale(1); }
+        50% { box-shadow: 0 0 25px rgba(79, 195, 247, 1); transform: scale(1.08); }
+        100% { box-shadow: 0 0 10px rgba(79, 195, 247, 0.7); transform: scale(1); }
+    }
+
+    /* Ready state for tractor button */
+    #tractor-button.ready {
+        animation: tractor-ready 1.5s infinite;
+        opacity: 1 !important; /* Always fully visible when ready */
+    }
+
+    @keyframes tractor-ready {
+        0% { box-shadow: 0 0 10px rgba(156, 39, 176, 0.7); transform: scale(1); }
+        50% { box-shadow: 0 0 25px rgba(156, 39, 176, 1); transform: scale(1.08); }
+        100% { box-shadow: 0 0 10px rgba(156, 39, 176, 0.7); transform: scale(1); }
+    }
+
+    /* Ready state for boost button */
+    #boost-button.ready {
+        animation: boost-ready 1.5s infinite;
+        opacity: 1 !important; /* Always fully visible when ready */
+    }
+
+    @keyframes boost-ready {
+        0% { box-shadow: 0 0 10px rgba(100, 181, 246, 0.7); transform: scale(1); }
+        50% { box-shadow: 0 0 25px rgba(100, 181, 246, 1); transform: scale(1.08); }
+        100% { box-shadow: 0 0 10px rgba(100, 181, 246, 0.7); transform: scale(1); }
+    }
+
+    /* Make sure the parent container doesn't override opacity when buttons are ready */
+    #ability-buttons.player-nearby .ability-button.ready {
+        opacity: 1 !important;
+    }
+}
+
+/* Enhanced ability button glow effects specifically for mobile landscape mode */
+@media (max-width: 768px) and (orientation: landscape) {
+    /* Repulsor button ready glow for landscape mode */
+    body.mobile-device.landscape-mode #repulsor-button.ready {
+        animation: landscape-repulsor-ready 1.5s infinite;
+        opacity: 1 !important;
+        border-color: #4fc3f7;
+        border-width: 3px;
+        box-shadow: 0 0 15px rgba(79, 195, 247, 0.8), inset 0 0 10px rgba(79, 195, 247, 0.5);
+    }
+
+    @keyframes landscape-repulsor-ready {
+        0% { box-shadow: 0 0 15px rgba(79, 195, 247, 0.8), inset 0 0 10px rgba(79, 195, 247, 0.5); transform: scale(1); }
+        50% { box-shadow: 0 0 25px rgba(79, 195, 247, 1), inset 0 0 15px rgba(79, 195, 247, 0.7); transform: scale(1.12); }
+        100% { box-shadow: 0 0 15px rgba(79, 195, 247, 0.8), inset 0 0 10px rgba(79, 195, 247, 0.5); transform: scale(1); }
+    }
+
+    /* Tractor button ready glow for landscape mode */
+    body.mobile-device.landscape-mode #tractor-button.ready {
+        animation: landscape-tractor-ready 1.5s infinite;
+        opacity: 1 !important;
+        border-color: #9c27b0;
+        border-width: 3px;
+        box-shadow: 0 0 15px rgba(156, 39, 176, 0.8), inset 0 0 10px rgba(156, 39, 176, 0.5);
+    }
+
+    @keyframes landscape-tractor-ready {
+        0% { box-shadow: 0 0 15px rgba(156, 39, 176, 0.8), inset 0 0 10px rgba(156, 39, 176, 0.5); transform: scale(1); }
+        50% { box-shadow: 0 0 25px rgba(156, 39, 176, 1), inset 0 0 15px rgba(156, 39, 176, 0.7); transform: scale(1.12); }
+        100% { box-shadow: 0 0 15px rgba(156, 39, 176, 0.8), inset 0 0 10px rgba(156, 39, 176, 0.5); transform: scale(1); }
+    }
+
+    /* Boost button ready glow for landscape mode */
+    body.mobile-device.landscape-mode #boost-button.ready {
+        animation: landscape-boost-ready 1.5s infinite;
+        opacity: 1 !important;
+        border-color: #64b5f6;
+        border-width: 3px;
+        box-shadow: 0 0 15px rgba(100, 181, 246, 0.8), inset 0 0 10px rgba(100, 181, 246, 0.5);
+    }
+
+    @keyframes landscape-boost-ready {
+        0% { box-shadow: 0 0 15px rgba(100, 181, 246, 0.8), inset 0 0 10px rgba(100, 181, 246, 0.5); transform: scale(1); }
+        50% { box-shadow: 0 0 25px rgba(100, 181, 246, 1), inset 0 0 15px rgba(100, 181, 246, 0.7); transform: scale(1.12); }
+        100% { box-shadow: 0 0 15px rgba(100, 181, 246, 0.8), inset 0 0 10px rgba(100, 181, 246, 0.5); transform: scale(1); }
+    }
+
+    /* Full power state for landscape ability buttons - enhanced effect */
+    body.mobile-device.landscape-mode .ability-button.full-power {
+        animation: landscape-fullPowerPulse 2s infinite;
+    }
+
+    @keyframes landscape-fullPowerPulse {
+        0% { box-shadow: 0 0 10px rgba(255, 255, 255, 0.7), inset 0 0 8px rgba(255, 255, 255, 0.5); }
+        25% { box-shadow: 0 0 20px rgba(255, 255, 255, 0.9), inset 0 0 12px rgba(255, 255, 255, 0.7); }
+        50% { box-shadow: 0 0 15px rgba(255, 255, 255, 0.8), inset 0 0 10px rgba(255, 255, 255, 0.6); }
+        75% { box-shadow: 0 0 20px rgba(255, 255, 255, 0.9), inset 0 0 12px rgba(255, 255, 255, 0.7); }
+        100% { box-shadow: 0 0 10px rgba(255, 255, 255, 0.7), inset 0 0 8px rgba(255, 255, 255, 0.5); }
+    }
+
+    /* Button icons also glow for better visibility */
+    body.mobile-device.landscape-mode #repulsor-button.ready .repulsor-icon {
+        filter: drop-shadow(0 0 5px rgba(79, 195, 247, 0.9));
+    }
+
+    body.mobile-device.landscape-mode #tractor-button.ready .tractor-icon {
+        filter: drop-shadow(0 0 5px rgba(156, 39, 176, 0.9));
+    }
+
+    body.mobile-device.landscape-mode #boost-button.ready .boost-icon {
+        filter: drop-shadow(0 0 5px rgba(100, 181, 246, 0.9));
+    }
+
+    /* Label text also becomes brighter */
+    body.mobile-device.landscape-mode .ability-button.ready .button-label {
+        text-shadow: 0 0 6px rgba(255, 255, 255, 1);
+        color: white;
+        font-weight: bold;
+    }
+}
+
+/* Hide elements in landscape mode */
+body.landscape-mode .landscape-hidden {
+    display: none !important;
+}
+
+/* Hide tutorial popup for mobile devices in landscape mode only */
+@media (max-width: 768px) and (orientation: landscape) {
+    /* Global tutorial properties for landscape mode */
+    body.mobile-device.landscape-mode #tutorialContent {
+        width: 95%;
+        max-width: 95vw;
+        padding: 0.6rem;
+        max-height: 90vh;
+        overflow: hidden;
+        border-radius: 8px;
+    }
+    
+    /* Consistent grid layout for all tutorial steps */
+    body.mobile-device.landscape-mode .tutorial-step {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto 1fr auto;
+        grid-template-areas:
+            "header header"
+            "content image"
+            "controls controls";
+        gap: 8px;
+        width: 100%;
+        height: 100%;
+        max-height: calc(90vh - 2rem);
+        overflow: hidden;
+    }
+    
+    /* Step 1 - Welcome - Special case with no image */
+    body.mobile-device.landscape-mode #tutorialStep1 {
+        grid-template-columns: 1fr !important;
+        grid-template-areas:
+            "header"
+            "content"
+            "controls" !important;
+        text-align: center;
+        align-items: center;
+    }
+    
+    body.mobile-device.landscape-mode #tutorialStep1 h2 {
+        grid-area: header;
+        margin-bottom: 0.5rem;
+    }
+    
+    body.mobile-device.landscape-mode #tutorialStep1 p {
+        grid-area: content;
+        margin: 0.5rem 0;
+        max-width: 90%;
+    }
+    
+    body.mobile-device.landscape-mode #tutorialStep1 .tutorial-controls {
+        grid-area: controls;
+        margin-top: 1rem;
+    }
+    
+    /* Step 2 - Movement */
+    body.mobile-device.landscape-mode #tutorialStep2 h2 {
+        grid-area: header;
+    }
+    
+    body.mobile-device.landscape-mode #tutorialStep2 .mobile-only {
+        grid-area: content;
+        overflow-y: auto;
+        margin: 0;
+        padding-right: 5px;
+        max-height: 20vh;
+    }
+    
+    body.mobile-device.landscape-mode #tutorialStep2 .tutorial-image.movement {
+        grid-area: image;
+        width: 80px !important;
+        height: 80px !important;
+        min-width: 80px !important;
+        min-height: 80px !important;
+        max-width: 80px !important;
+        max-height: 80px !important;
+        margin: auto !important;
+        justify-self: center;
+        align-self: center;
+    }
+    
+    /* Step 3 - Energy Collection */
+    body.mobile-device.landscape-mode #tutorialStep3 h2 {
+        grid-area: header;
+    }
+    
+    body.mobile-device.landscape-mode #tutorialStep3 .mobile-only {
+        grid-area: content;
+        overflow-y: auto;
+        margin: 0;
+        padding-right: 5px;
+        max-height: 20vh;
+    }
+    
+    body.mobile-device.landscape-mode #tutorialStep3 .tutorial-image.energy {
+        grid-area: image;
+        width: 80px !important;
+        height: 80px !important;
+        max-width: 80px !important;
+        max-height: 80px !important;
+        margin: auto !important;
+    }
+    
+    /* Step 4 - Enemy Avoidance */
+    body.mobile-device.landscape-mode #tutorialStep4 h2 {
+        grid-area: header;
+    }
+    
+    body.mobile-device.landscape-mode #tutorialStep4 > p {
+        grid-area: content;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        text-align: left;
+        padding-right: 5px;
+    }
+    
+    body.mobile-device.landscape-mode #tutorialStep4 .tutorial-image.enemies {
+        grid-area: image;
+        width: 80px !important;
+        height: 80px !important;
+        max-width: 80px !important;
+        max-height: 80px !important;
+        margin: auto !important;
+    }
+    
+    /* Step 5 - Special Abilities - More content needs optimization */
+    body.mobile-device.landscape-mode #tutorialStep5 {
+        grid-template-rows: auto minmax(0, 1fr) auto;
+    }
+    
+    body.mobile-device.landscape-mode #tutorialStep5 h2 {
+        grid-area: header;
+    }
+    
+    body.mobile-device.landscape-mode #tutorialStep5 .mobile-only {
+        grid-area: content;
+        overflow-y: auto;
+        margin: 0;
+        padding-right: 5px;
+        max-height: 25vh;
+        font-size: 0.75rem;
+        line-height: 1.2;
+    }
+    
+    body.mobile-device.landscape-mode #tutorialStep5 .mobile-only p {
+        margin-bottom: 0.2rem;
+        font-size: 0.75rem;
+    }
+    
+    body.mobile-device.landscape-mode #tutorialStep5 .tutorial-image.abilities {
+        grid-area: image;
+        width: 80px !important;
+        height: 80px !important;
+        max-width: 80px !important;
+        max-height: 80px !important;
+        margin: auto !important;
+    }
+    
+    /* Step 6 - Power-ups */
+    body.mobile-device.landscape-mode #tutorialStep6 h2 {
+        grid-area: header;
+    }
+    
+    body.mobile-device.landscape-mode #tutorialStep6 > p {
+        grid-area: content;
+        margin: 0.1rem 0;
+        font-size: 0.8rem;
+        line-height: 1.2;
+    }
+    
+    body.mobile-device.landscape-mode #tutorialStep6 .tutorial-image.powerups {
+        grid-area: image;
+        width: 80px !important;
+        height: 80px !important;
+        max-width: 80px !important;
+        max-height: 80px !important;
+        margin: auto !important;
+    }
+    
+    /* For Step 6 specifically, create a scrollable content area */
+    body.mobile-device.landscape-mode #tutorialStep6::after {
+        content: none;
+    }
+    
+    body.mobile-device.landscape-mode #tutorialStep6 .content-wrapper {
+        grid-area: content;
+        overflow-y: auto;
+        max-height: 20vh;
+        padding-right: 5px;
+    }
+    
+    /* Step 7 - Ready to Play - No image */
+    body.mobile-device.landscape-mode #tutorialStep7 {
+        grid-template-columns: 1fr !important;
+        grid-template-areas:
+            "header"
+            "content"
+            "controls" !important;
+    }
+    
+    body.mobile-device.landscape-mode #tutorialStep7 h2 {
+        grid-area: header;
+    }
+    
+    body.mobile-device.landscape-mode #tutorialStep7 .mobile-only {
+        grid-area: content;
+        overflow-y: auto;
+        padding: 0 5px;
+        max-height: 30vh;
+    }
+    
+    body.mobile-device.landscape-mode #tutorialStep7 .mobile-only p {
+        font-size: 0.8rem;
+        line-height: 1.2;
+        margin: 0.2rem 0;
+    }
+    
+    /* Common styles for all steps */
+    body.mobile-device.landscape-mode .tutorial-step h2 {
+        font-size: 1.1rem;
+        margin-bottom: 0.3rem;
+    }
+    
+    body.mobile-device.landscape-mode .tutorial-step p {
+        font-size: 0.8rem;
+        line-height: 1.3;
+        margin-bottom: 0.3rem;
+        text-align: left;
+    }
+    
+    body.mobile-device.landscape-mode .tutorial-step .tutorial-controls {
+        margin-top: 0.5rem;
+    }
+    
+    body.mobile-device.landscape-mode .tutorial-step button {
+        padding: 6px 12px;
+        font-size: 0.8rem;
+        min-width: 80px;
+    }
+    
+    body.mobile-device.landscape-mode #tutorialProgress {
+        margin-top: 0.3rem;
+        font-size: 0.7rem;
+    }
+    
+    /* Custom scrollbar for better UX */
+    body.mobile-device.landscape-mode .tutorial-step [class*="-only"]::-webkit-scrollbar,
+    body.mobile-device.landscape-mode .content-wrapper::-webkit-scrollbar {
+        width: 4px;
+    }
+    
+    body.mobile-device.landscape-mode .tutorial-step [class*="-only"]::-webkit-scrollbar-thumb,
+    body.mobile-device.landscape-mode .content-wrapper::-webkit-scrollbar-thumb {
+        background-color: #4fc3f7;
+        border-radius: 2px;
+    }
+
+    /* Hide tutorial popup for mobile devices in landscape mode only */
+    body.mobile-device.landscape-mode #tutorial {
+        display: none !important; /* Force hide the tutorial overlay in landscape mode */
+    }
+    
+    /* Hide the tutorial button in landscape mode since the tutorial is disabled */
+    body.mobile-device.landscape-mode #tutorialButton-mobile {
+        display: none !important;
+    }
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(0);
+        opacity: 0.8;
+    }
+    100% {
+        transform: scale(3);
+        opacity: 0;
+    }
+}
+
+@keyframes attract-pulse {
+    0% {
+        transform: scale(1);
+        opacity: 0.9;
+    }
+    20% {
+        transform: scale(0.9);
+        opacity: 0.8;
+    }
+    40% {
+        transform: scale(0.8);
+        opacity: 0.9;
+    }
+    60% {
+        transform: scale(0.7);
+        opacity: 1.0;
+    }
+    80% {
+        transform: scale(0.8);
+        opacity: 0.9;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 0.9;
+    }
+}
+
+.speed-trail {
+    background: linear-gradient(to right, rgba(79, 195, 247, 0.8), rgba(79, 195, 247, 0));
+    border-radius: 50%;
+    animation: fade 0.3s ease-out;
+}
+
+/* Boost launch effects */
+.boost-launch-burst {
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.9) 0%, rgba(100, 181, 246, 0.7) 30%, rgba(100, 181, 246, 0) 70%);
+    pointer-events: none;
+    animation: burst 0.7s ease-out forwards;
+    box-shadow: 0 0 30px rgba(100, 181, 246, 0.8);
+    z-index: 10;
+}
+
+.boost-launch-secondary-burst {
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.8) 0%, rgba(79, 195, 247, 0.6) 40%, rgba(79, 195, 247, 0) 80%);
+    pointer-events: none;
+    animation: secondary-burst 0.5s ease-out forwards;
+    box-shadow: 0 0 20px rgba(79, 195, 247, 0.7);
+    z-index: 9;
+}
+
+.boost-launch-trail {
+    position: absolute;
+    background: linear-gradient(to right, rgba(100, 181, 246, 0.9), rgba(100, 181, 246, 0));
+    border-radius: 10px;
+    pointer-events: none;
+    animation: trail-fade 1.5s forwards;
+    box-shadow: 0 0 15px rgba(100, 181, 246, 0.6);
+    z-index: 8;
+}
+
+.boost-launch-particle {
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.9) 0%, rgba(100, 181, 246, 0.7) 50%, rgba(100, 181, 246, 0) 100%);
+    pointer-events: none;
+    animation: particle-fade 1s ease-out forwards;
+    box-shadow: 0 0 10px rgba(100, 181, 246, 0.5);
+    z-index: 7;
+}
+
+/* Boost arrival effects */
+.boost-arrival-burst {
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 1) 0%, rgba(100, 181, 246, 0.8) 20%, rgba(100, 181, 246, 0) 70%);
+    pointer-events: none;
+    animation: arrival-burst 0.6s ease-out forwards;
+    box-shadow: 0 0 40px rgba(100, 181, 246, 0.9);
+    z-index: 10;
+}
+
+.boost-arrival-ripple {
+    position: absolute;
+    border-radius: 50%;
+    border: 3px solid rgba(100, 181, 246, 0.8);
+    background: transparent;
+    pointer-events: none;
+    animation: ripple 0.8s ease-out forwards;
+    box-shadow: 0 0 20px rgba(100, 181, 246, 0.6), inset 0 0 20px rgba(100, 181, 246, 0.6);
+    z-index: 9;
+}
+
+.boost-arrival-particle {
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 1) 0%, rgba(100, 181, 246, 0.9) 40%, rgba(100, 181, 246, 0) 100%);
+    pointer-events: none;
+    animation: arrival-particle 0.8s ease-out forwards;
+    box-shadow: 0 0 15px rgba(100, 181, 246, 0.7);
+    z-index: 8;
+}
+
+@keyframes burst {
+    0% { transform: scale(0.2); opacity: 1; }
+    50% { transform: scale(1.5); opacity: 0.8; }
+    100% { transform: scale(3); opacity: 0; }
+}
+
+@keyframes secondary-burst {
+    0% { transform: scale(0.5); opacity: 0.8; }
+    100% { transform: scale(2.5); opacity: 0; }
+}
+
+@keyframes trail-fade {
+    0% { opacity: 1; transform: scaleX(1); }
+    70% { opacity: 0.7; transform: scaleX(1.2); }
+    100% { opacity: 0; transform: scaleX(0.8); }
+}
+
+@keyframes particle-fade {
+    0% { transform: scale(1); opacity: 1; }
+    70% { transform: scale(0.7); opacity: 0.7; }
+    100% { transform: scale(0.3); opacity: 0; }
+}
+
+@keyframes arrival-burst {
+    0% { transform: scale(0.1); opacity: 0; }
+    20% { transform: scale(0.5); opacity: 1; }
+    100% { transform: scale(2.5); opacity: 0; }
+}
+
+@keyframes ripple {
+    0% { transform: scale(0.1); opacity: 1; border-width: 10px; }
+    100% { transform: scale(2); opacity: 0; border-width: 1px; }
+}
+
+@keyframes arrival-particle {
+    0% { transform: scale(0.2) translateX(0) translateY(0); opacity: 1; }
+    100% { transform: scale(1.5) translateX(var(--tx, 0)) translateY(var(--ty, 0)); opacity: 0; }
+}
+
+@keyframes fade-out {
+    0% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+@keyframes fade {
+    0% {
+        opacity: 0.8;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+.collision {
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0) 70%);
+    border-radius: 50%;
+    animation: collision 0.3s ease-out;
+}
+
+/* Gravity well effects */
+.gravity-well {
+    border-radius: 50%;
+    pointer-events: none;
+    animation: gravity-well-pulse 3s infinite;
+    opacity: 0.3;
+}
+
+.gravity-well.attract {
+    background: radial-gradient(circle, rgba(64, 0, 128, 0.3) 0%, rgba(64, 0, 128, 0) 70%);
+    box-shadow: 0 0 20px rgba(64, 0, 128, 0.5);
+}
+
+.gravity-well.repel {
+    background: radial-gradient(circle, rgba(128, 0, 64, 0.3) 0%, rgba(128, 0, 64, 0) 70%);
+    box-shadow: 0 0 20px rgba(128, 0, 64, 0.5);
+}
+
+@keyframes gravity-well-pulse {
+    0% { transform: scale(0.95); opacity: 0.2; }
+    50% { transform: scale(1.05); opacity: 0.4; }
+    100% { transform: scale(0.95); opacity: 0.2; }
+}
+
+/* Black hole effects */
+.black-hole-outer {
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(156, 39, 176, 0.7) 0%, rgba(0, 0, 0, 0) 80%);
+    border: 4px solid rgba(156, 39, 176, 0.8);
+    box-shadow: 0 0 40px rgba(156, 39, 176, 0.8);
+    pointer-events: none;
+    z-index: 6;
+    /* Use a less resource-intensive animation with fewer keyframes */
+    animation: pulse-black-hole 2s ease-in-out infinite;
+    /* Use hardware acceleration */
+    will-change: transform;
+    transform: translateZ(0);
+}
+
+.black-hole-outer-ring {
+    position: absolute;
+    top: -15%;
+    left: -15%;
+    width: 130%;
+    height: 130%;
+    border-radius: 50%;
+    border: 2px solid rgba(156, 39, 176, 0.6);
+    box-shadow: 0 0 20px rgba(156, 39, 176, 0.5);
+    /* Use hardware acceleration */
+    will-change: transform;
+    transform: translateZ(0);
+    /* Slower animation for better performance */
+    animation: rotate-black-hole-ring 12s linear infinite reverse;
+}
+
+.black-hole-inner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 40%;
+    height: 40%;
+    margin-left: -20%;
+    margin-top: -20%;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0, 0, 0, 1) 0%, rgba(156, 39, 176, 0.9) 70%, rgba(156, 39, 176, 0) 100%);
+    box-shadow: 0 0 25px rgba(156, 39, 176, 1);
+    transform-origin: center;
+    /* Use hardware acceleration */
+    will-change: transform;
+    transform: translateZ(0);
+    /* Slower animation for better performance */
+    animation: rotate-black-hole 8s linear infinite;
+}
+
+/* Simplified animation with fewer keyframes */
+@keyframes pulse-black-hole {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+@keyframes rotate-black-hole {
+    to { transform: rotate(360deg); }
+}
+
+@keyframes rotate-black-hole-ring {
+    to { transform: rotate(360deg); }
+}
+
+@keyframes collision {
+    0% {
+        transform: scale(0);
+        opacity: 0.8;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 0;
+    }
+}
+
+/* Responsive styles for different screen sizes and orientations */
+
+/* Portrait mode (default) */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+
+    .controls {
+        width: 100%;
+        height: 300px;
+        border-left: none;
+        border-top: 1px solid #333;
+    }
+
+    #hud {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    #abilities {
+        bottom: auto;
+        right: auto;
+        top: 20px;
+        right: 20px;
+    }
+
+    .instructions {
+        max-width: 90%;
+        padding: 1rem;
+    }
+
+    /* Adjust start screen for mobile portrait */
+    body.mobile-device.portrait-mode #startScreen h1 {
+        font-size: 1.8rem;
+        margin-bottom: 0.2rem;
+    }
+
+    body.mobile-device.portrait-mode #startScreen .tagline {
+        font-size: 0.9rem;
+        margin-bottom: 0.3rem;
+    }
+
+    body.mobile-device.portrait-mode #startScreen button {
+        margin-top: 5px;
+        padding: 8px 10px;
+        font-size: 0.9rem;
+    }
+
+    /* Adjust logo container for mobile portrait */
+    body.mobile-device.portrait-mode #startScreen .logo-container {
+        margin-bottom: 0.3rem;
+        margin-top: 0.3rem;
+    }
+
+    body.mobile-device.portrait-mode #game-logo {
+        max-width: 150px;
+    }
+}
+
+/* Landscape mode */
+@media (max-width: 768px) and (orientation: landscape) {
+    /* Adjust start screen for landscape mode */
+    #startScreen {
+        padding: 5px 2%;
+        justify-content: space-between;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        align-items: flex-start;
+        overflow: hidden;
+    }
+
+    /* Create left column for logo and title in landscape mode */
+    body.mobile-device.landscape-mode #startScreen .logo-container,
+    body.mobile-device.landscape-mode #startScreen h1,
+    body.mobile-device.landscape-mode #startScreen .tagline,
+    body.mobile-device.landscape-mode #startScreen .button-container {
+        width: 25%;
+        margin-right: 1%;
+        text-align: center;
+    }
+
+    /* Create a left column container */
+    body.mobile-device.landscape-mode #startScreen::before {
+        content: '';
+        display: block;
+        width: 25%;
+        float: left;
+    }
+
+    /* Adjust logo for landscape mode */
+    #startScreen .logo-container {
+        margin-bottom: 0.2rem;
+        margin-top: 0;
+    }
+
+    #startScreen #game-logo {
+        max-width: 80px;
+    }
+
+    #startScreen h1 {
+        font-size: 1.2rem;
+        margin-bottom: 0.1rem;
+    }
+
+    #startScreen .tagline {
+        font-size: 0.7rem;
+        margin-bottom: 0.2rem;
+    }
+
+    /* Adjust button container for landscape */
+    body.mobile-device.landscape-mode .button-container {
+        flex-direction: column;
+        gap: 5px;
+        margin-bottom: 0.2rem;
+    }
+
+    body.mobile-device.landscape-mode .button-container button {
+        width: 100%;
+        min-width: 0;
+        margin-top: 2px;
+        padding: 5px 8px;
+        font-size: 0.8rem;
+    }
+
+    /* Create right column for instructions in landscape mode */
+    body.mobile-device.landscape-mode .instructions {
+        width: 72%;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        max-height: 90vh; /* Increased to show all content */
+        overflow-y: hidden; /* Prevent scrolling */
+        padding: 0.3rem;
+        margin-top: 0;
+        margin-bottom: 0;
+        text-align: left;
+        background-color: rgba(0, 0, 0, 0.6);
+        border: 1px solid rgba(79, 195, 247, 0.4);
+        float: right;
+    }
+
+    /* Adjust mission section to be more compact */
+    body.mobile-device.landscape-mode .instructions h3:first-of-type {
+        margin-bottom: 0;
+    }
+
+    body.mobile-device.landscape-mode .instructions h3:first-of-type + p {
+        margin-top: 0;
+    }
+
+    body.mobile-device.landscape-mode .instructions h3 {
+        width: 100%;
+        text-align: left;
+        margin-top: 0.2rem;
+        margin-bottom: 0.1rem;
+        font-size: 0.8rem;
+        color: #4fc3f7;
+        border-bottom: 1px solid rgba(79, 195, 247, 0.3);
+        padding-bottom: 0.1rem;
+        letter-spacing: -0.2px;
+    }
+
+    body.mobile-device.landscape-mode .instructions h3:first-of-type {
+        margin-top: 0;
+    }
+
+    body.mobile-device.landscape-mode .instructions p {
+        width: 100%;
+        margin: 0.05rem 0;
+        font-size: 0.65rem;
+        line-height: 1.05;
+        white-space: normal;
+        overflow: visible;
+        text-overflow: clip;
+        letter-spacing: -0.2px;
+    }
+
+    /* Optimize mobile controls display in landscape */
+    body.mobile-device.landscape-mode .mobile-only {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        width: 100%;
+        margin-top: 0.1rem;
+    }
+
+    body.mobile-device.landscape-mode .mobile-only p {
+        width: 32%; /* Three controls per row */
+        font-size: 0.65rem;
+        margin: 0.05rem 0;
+        padding: 0;
+        line-height: 1.1;
+    }
+
+    /* Adjust desktop-only content in landscape */
+    body.mobile-device.landscape-mode .desktop-only {
+        display: none;
+    }
+
+    /* Make the particles section more compact in landscape */
+    body.mobile-device.landscape-mode .instructions h3:nth-of-type(3) {
+        margin-top: 0.2rem;
+    }
+
+    body.mobile-device.landscape-mode .green-dot,
+    body.mobile-device.landscape-mode .red-dot,
+    body.mobile-device.landscape-mode .blue-dot,
+    body.mobile-device.landscape-mode .yellow-dot,
+    body.mobile-device.landscape-mode .dust-dot {
+        width: 6px;
+        height: 6px;
+        margin-right: 2px;
+        display: inline-block;
+        vertical-align: middle;
+    }
+
+    body.mobile-device.landscape-mode .key {
+        padding: 1px 3px;
+        font-size: 0.7rem;
+        background-color: rgba(79, 195, 247, 0.3);
+        border: 1px solid rgba(79, 195, 247, 0.5);
+    }
+
+    body.mobile-device.landscape-mode #tutorialButton {
+        margin-top: 2px;
+    }
+
+    /* Tutorial adjustments for mobile landscape mode */
+    body.mobile-device.landscape-mode #tutorial {
+        overflow: hidden;
+    }
+
+    body.mobile-device.landscape-mode #tutorialContent {
+        width: 95%;
+        max-width: 90vw;
+        padding: 0.8rem;
+        height: auto;
+        max-height: 85vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        border-radius: 8px;
+    }
+
+    /* Tutorial step layout optimized for landscape */
+    body.mobile-device.landscape-mode .tutorial-step {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto 1fr auto;
+        grid-template-areas:
+            "header header"
+            "content image"
+            "controls controls";
+        column-gap: 10px;
+        width: 100%;
+        height: 100%;
+        padding-bottom: 0.3rem;
+    }
+
+    body.mobile-device.landscape-mode .tutorial-step h2 {
+        grid-area: header;
+        font-size: 1.2rem;
+        margin-bottom: 0.4rem;
+        text-align: center;
+    }
+
+    body.mobile-device.landscape-mode .tutorial-step .mobile-only,
+    body.mobile-device.landscape-mode .tutorial-step .desktop-only,
+    body.mobile-device.landscape-mode .tutorial-step > p {
+        grid-area: content;
+        overflow-y: auto;
+        max-height: 50vh;
+        padding-right: 0.3rem;
+        scrollbar-width: thin;
+    }
+
+    body.mobile-device.landscape-mode .tutorial-step .tutorial-image {
+        grid-area: image;
+        height: auto;
+        margin: 0;
+        aspect-ratio: 1.2/1;
+        max-height: 50vh;
+        background-position: center;
+    }
+
+    body.mobile-device.landscape-mode .tutorial-controls {
+        grid-area: controls;
+        margin-top: 0.6rem;
+        justify-content: space-between;
+    }
+
+    body.mobile-device.landscape-mode .tutorial-controls button {
+        padding: 6px 12px;
+        font-size: 0.8rem;
+        min-width: 80px;
+    }
+
+    body.mobile-device.landscape-mode #tutorialProgress {
+        margin-top: 0.5rem;
+        font-size: 0.7rem;
+    }
+
+    /* Make tutorial paragraphs more readable in landscape */
+    body.mobile-device.landscape-mode .tutorial-step p {
+        text-align: left;
+        font-size: 0.8rem;
+        line-height: 1.3;
+        margin-bottom: 0.4rem;
+    }
+
+    /* Custom scrollbar for content area */
+    body.mobile-device.landscape-mode .tutorial-step .mobile-only::-webkit-scrollbar,
+    body.mobile-device.landscape-mode .tutorial-step .desktop-only::-webkit-scrollbar {
+        width: 4px;
+    }
+
+    body.mobile-device.landscape-mode .tutorial-step .mobile-only::-webkit-scrollbar-thumb,
+    body.mobile-device.landscape-mode .tutorial-step .desktop-only::-webkit-scrollbar-thumb {
+        background-color: #4fc3f7;
+        border-radius: 2px;
+    }
+
+    /* Fix for the first step which has different layout */
+    body.mobile-device.landscape-mode #tutorialStep1 {
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: center !important;
+        align-items: center !important;
+        text-align: center !important;
+        padding: 1rem !important;
+        height: 100%; /* Ensure it fills the content area */
+    }
+
+    body.mobile-device.landscape-mode #tutorialStep1 h2 {
+        font-size: 1.3rem; /* Slightly larger title */
+        margin-bottom: 1rem;
+    }
+
+    body.mobile-device.landscape-mode #tutorialStep1 p {
+        font-size: 0.9rem; /* Adjust text size */
+        margin: 0 0 1.5rem 0;
+        max-width: 90%;
+    }
+
+    body.mobile-device.landscape-mode #tutorialStep1 .tutorial-controls {
+        width: 100%;
+        justify-content: flex-end; /* Align Next button to the right */
+    }
+
+    /* Step 2 - Movement - Explicit sizing and positioning for landscape */
+    body.mobile-device.landscape-mode #tutorialStep2 {
+        align-items: center; /* Vertically center grid items */
+        overflow: hidden; /* Prevent overflow */
+    }
+
+    /* Explicitly define container size and reset conflicting properties */
+    body.mobile-device.landscape-mode #tutorialStep2 .tutorial-image.movement {
+        grid-area: image;
+        width: 120px !important; /* Force specific width */
+        height: 120px !important; /* Force specific height */
+        max-width: 120px !important;
+        max-height: 120px !important;
+        margin: auto !important; /* Center in grid cell */
+        padding: 0 !important;
+        background-color: transparent !important; /* Remove default background */
+        border-radius: 5px !important; /* Maintain border radius */
+        position: relative !important; /* Ensure positioning context */
+        overflow: hidden !important;
+        display: flex !important; /* Use flex to manage the ::before element */
+        justify-content: center !important;
+        align-items: center !important;
+        align-self: center !important; /* Grid alignment */
+        justify-self: center !important; /* Grid alignment */
+    }
+
+    /* Explicitly define pseudo-element properties */
+    body.mobile-device.landscape-mode #tutorialStep2 .tutorial-image.movement::before {
+        content: '' !important;
+        position: absolute !important; /* Position within the container */
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important; /* Fill the container */
+        height: 100% !important; /* Fill the container */
+        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="20" fill="white"/><path d="M50 20 L60 40 L40 40 Z" fill="white"/><path d="M50 80 L60 60 L40 60 Z" fill="white"/><path d="M20 50 L40 60 L40 40 Z" fill="white"/><path d="M80 50 L60 60 L60 40 Z" fill="white"/></svg>') !important;
+        background-size: contain !important;
+        background-repeat: no-repeat !important;
+        background-position: center !important;
+        opacity: 0.8 !important;
+    }
+
+    /* Ensure text content area is correctly placed and sized */
+    body.mobile-device.landscape-mode #tutorialStep2 .mobile-only {
+        grid-area: content !important;
+        max-height: 45vh; /* Adjust max height if needed */
+        overflow-y: auto;
+        padding-right: 5px;
+    }
+
+    /* Reduced size for Step 2 tutorial image in mobile landscape only */
+    html body.mobile-device.landscape-mode #tutorialContent #tutorialStep2 .tutorial-image.movement {
+        /* Force much smaller size - half of current size */
+        width: 60px !important;
+        height: 60px !important;
+        min-width: 60px !important;
+        min-height: 60px !important;
+        max-width: 60px !important;
+        max-height: 60px !important;
+        flex: 0 0 60px !important;
+    }
+    
+    /* Also reduce padding/margin to ensure it takes less space */
+    html body.mobile-device.landscape-mode #tutorialContent #tutorialStep2 {
+        padding: 0 !important;
+    }
+
+    /* Step 3 - Energy Collection - Refined for landscape */
+    body.mobile-device.landscape-mode #tutorialStep3 .tutorial-image.energy {
+        /* Apply similar sizing constraints as Step 2 */
+        grid-area: image;
+        width: 120px !important;
+        height: 120px !important;
+        max-width: 120px !important;
+        max-height: 120px !important;
+        margin: auto !important;
+        align-self: center !important;
+        justify-self: center !important;
+        position: relative !important;
+        overflow: hidden !important;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        background-color: transparent !important;
+    }
+
+    body.mobile-device.landscape-mode #tutorialStep3 .tutorial-image.energy::before {
+        content: '' !important;
+        position: absolute !important;
+        top: 0 !important; left: 0 !important;
+        width: 100% !important; height: 100% !important;
+        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="20" fill="white"/><circle cx="30" cy="30" r="10" fill="%2381c784"/><circle cx="70" cy="30" r="10" fill="%2381c784"/><circle cx="30" cy="70" r="10" fill="%2381c784"/><circle cx="70" cy="70" r="10" fill="%2381c784"/></svg>') !important;
+        background-size: contain !important;
+        background-repeat: no-repeat !important;
+        background-position: center !important;
+        opacity: 0.8 !important;
+    }
+
+    body.mobile-device.landscape-mode #tutorialStep3 .mobile-only {
+        /* Ensure text area is properly aligned */
+        grid-area: content;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+        max-height: 45vh;
+        overflow-y: auto;
+    }
+
+    /* Step 4 - Enemy Avoidance - Refined for landscape */
+    body.mobile-device.landscape-mode #tutorialStep4 .tutorial-image.enemies {
+        /* Apply similar sizing constraints */
+        grid-area: image;
+        width: 120px !important; height: 120px !important;
+        max-width: 120px !important; max-height: 120px !important;
+        margin: auto !important; align-self: center !important; justify-self: center !important;
+        position: relative !important; overflow: hidden !important;
+        display: flex !important; justify-content: center !important; align-items: center !important;
+        background-color: transparent !important;
+    }
+
+    body.mobile-device.landscape-mode #tutorialStep4 .tutorial-image.enemies::before {
+        content: '' !important; position: absolute !important; top: 0 !important; left: 0 !important;
+        width: 100% !important; height: 100% !important;
+        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="20" fill="white"/><circle cx="20" cy="20" r="10" fill="%23e57373"/><circle cx="80" cy="20" r="10" fill="%23e57373"/><circle cx="20" cy="80" r="10" fill="%23e57373"/><circle cx="80" cy="80" r="10" fill="%23e57373"/></svg>') !important;
+        background-size: contain !important; background-repeat: no-repeat !important; background-position: center !important;
+        opacity: 0.8 !important;
+    }
+
+    body.mobile-device.landscape-mode #tutorialStep4 > p {
+        /* Ensure text area is properly aligned */
+        grid-area: content;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        height: 100%;
+        font-size: 0.9rem;
+        padding: 0 5px;
+    }
+
+    /* Step 5 - Special Abilities - Refined for landscape */
+    body.mobile-device.landscape-mode #tutorialStep5 {
+        /* Keep specific grid areas */
+        grid-template-rows: auto auto 1fr auto;
+        grid-template-areas:
+            "header header"
+            "note note"
+            "content image"
+            "controls controls";
+    }
+
+    body.mobile-device.landscape-mode #tutorialStep5 .tutorial-image.abilities {
+        /* Apply similar sizing constraints */
+        grid-area: image;
+        width: 120px !important; height: 120px !important;
+        max-width: 120px !important; max-height: 120px !important;
+        margin: auto !important; align-self: center !important; justify-self: center !important;
+        position: relative !important; overflow: hidden !important;
+        display: flex !important; justify-content: center !important; align-items: center !important;
+        background-color: transparent !important;
+    }
+
+    body.mobile-device.landscape-mode #tutorialStep5 .tutorial-image.abilities::before {
+        content: '' !important; position: absolute !important; top: 0 !important; left: 0 !important;
+        width: 100% !important; height: 100% !important;
+        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="20" fill="white"/><circle cx="50" cy="50" r="35" fill="none" stroke="%234fc3f7" stroke-width="3" stroke-dasharray="10 5"/><path d="M20 50 L40 40 L40 60 Z" fill="%234fc3f7"/><path d="M80 50 L60 40 L60 60 Z" fill="%234fc3f7"/><path d="M50 20 L40 40 L60 40 Z" fill="%234fc3f7"/><path d="M50 80 L40 60 L60 60 Z" fill="%234fc3f7"/></svg>') !important;
+        background-size: contain !important; background-repeat: no-repeat !important; background-position: center !important;
+        opacity: 0.8 !important;
+    }
+
+    body.mobile-device.landscape-mode #tutorialStep5 .mobile-only {
+        /* Adjust text area */
+        grid-area: content;
+        max-height: 35vh; /* Reduce height slightly */
+        overflow-y: auto;
+    }
+
+    /* Step 6 - Power-ups - Refined for landscape */
+    body.mobile-device.landscape-mode #tutorialStep6 .tutorial-image.powerups {
+        /* Apply similar sizing constraints */
+        grid-area: image;
+        width: 120px !important; height: 120px !important;
+        max-width: 120px !important; max-height: 120px !important;
+        margin: auto !important; align-self: center !important; justify-self: center !important;
+        position: relative !important; overflow: hidden !important;
+        display: flex !important; justify-content: center !important; align-items: center !important;
+        background-color: transparent !important;
+    }
+
+    body.mobile-device.landscape-mode #tutorialStep6 .tutorial-image.powerups::before {
+        content: '' !important; position: absolute !important; top: 0 !important; left: 0 !important;
+        width: 100% !important; height: 100% !important;
+        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="20" fill="white"/><circle cx="25" cy="50" r="10" fill="%2364b5f6"/><circle cx="75" cy="50" r="10" fill="%23fff176"/></svg>') !important;
+        background-size: contain !important; background-repeat: no-repeat !important; background-position: center !important;
+        opacity: 0.8 !important;
+    }
+
+    body.mobile-device.landscape-mode #tutorialStep6 > p {
+        /* Reset floats and use grid */
+        float: none !important;
+        width: auto !important;
+        clear: none !important;
+        grid-area: content; /* All text goes to content area */
+        margin-bottom: 0.3rem;
+        font-size: 0.8rem;
+    }
+
+    body.mobile-device.landscape-mode #tutorialStep6 > p:nth-child(n+2) { /* Target all p after h2 */
+        /* Style as list items */
+    }
+
+    body.mobile-device.landscape-mode #tutorialStep6::after {
+        content: none !important; /* Remove clearfix */
+    }
+
+    /* Step 7 - Ready to Play - Refined for landscape */
+    body.mobile-device.landscape-mode #tutorialStep7 {
+        /* This step has no image, adjust grid */
+        grid-template-columns: 1fr !important; /* Single column */
+        grid-template-rows: auto 1fr auto !important; /* Header, Content, Controls */
+        grid-template-areas:
+            "header"
+            "content"
+            "controls" !important;
+    }
+
+    body.mobile-device.landscape-mode #tutorialStep7 .mobile-only {
+        grid-area: content;
+        max-height: 55vh; /* Allow more height */
+        overflow-y: auto;
+        padding: 0 10px;
+        text-align: center;
+    }
+
+    body.mobile-device.landscape-mode #tutorialStep7 .mobile-only p {
+        text-align: center;
+        margin-bottom: 0.5rem;
+    }
+
+    /* General refinement for controls in landscape */
+    body.mobile-device.landscape-mode .tutorial-controls {
+        padding: 0 5px; /* Add padding */
+    }
+}
+
+/* Game message styles */
+.game-message {
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.5);
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    z-index: 100;
+    opacity: 0;
+    transition: all 0.3s ease;
+    pointer-events: none;
+    border: 2px solid currentColor;
+    box-shadow: 0 0 15px currentColor;
+}
+
+.game-message.active {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+/* Low energy effect */
+@keyframes lowEnergyPulse {
+    0% { box-shadow: 0 0 0 0 rgba(244, 67, 54, 0.7); }
+    70% { box-shadow: 0 0 0 10px rgba(244, 67, 54, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(244, 67, 54, 0); }
+}
+
+#energyBar.critical {
+    animation: lowEnergyPulse 1s infinite;
+}
+
+/* On-screen ability buttons */
+#ability-buttons {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: none; /* Hide by default */
+    gap: 25px;
+    z-index: 1000; /* Increased z-index to ensure it's above everything */
+    pointer-events: auto; /* Ensure it receives mouse events */
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 15px 25px;
+    border-radius: 50px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+}
+
+/* Adjust ability buttons position based on orientation */
+body.landscape-mode #ability-buttons {
+    bottom: 15px;
+    padding: 10px 20px;
+    gap: 20px;
+}
+
+/* Mobile landscape specific adjustments */
+body.mobile-device.landscape-mode #ability-buttons {
+    flex-direction: row;
+    left: auto;
+    right: 15px;
+    transform: none;
+    bottom: 10px;
+    padding: 8px 15px;
+    gap: 15px;
+    border-radius: 30px;
+}
+
+body.mobile-device.landscape-mode #hud {
+    flex-direction: row;
+    justify-content: flex-start;
+    max-width: 50%;
+    top: 10px;
+    left: 10px;
+    right: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 5px 10px;
+    border-radius: 8px;
+}
+
+body.mobile-device.landscape-mode #game-stats {
+    padding: 5px;
+    font-size: 0.85rem;
+}
+
+body.mobile-device.landscape-mode #abilities {
+    display: none; /* Hide ability indicators in landscape mode too */
+}
+
+/* Responsive styles for mobile devices */
+@media (max-width: 768px) {
+    /* Mobile HUD layout - more compact and positioned to the side */
+    #hud {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+        top: 10px;
+        left: 10px;
+        right: auto;
+        max-width: 40%;
+    }
+
+    body.mobile-device #game-stats {
+        padding: 6px 8px;
+        font-size: 0.9rem;
+        max-width: 100%;
+    }
+
+    body.mobile-device #abilities {
+        padding: 6px 8px;
+        gap: 8px;
+        max-width: 100%;
+        display: none; /* Hide ability indicators in the HUD for mobile */
+    }
+
+    body.mobile-device .ability {
+        min-width: 60px;
+        padding: 5px;
+    }
+
+    /* Ability buttons positioned to the right side for easier thumb access */
+    body.mobile-device.portrait-mode #ability-buttons {
+        bottom: 15px;
+        padding: 10px 15px;
+        left: auto;
+        right: 15px;
+        transform: none;
+        border-radius: 30px;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .ability-button {
+        width: 70px;
+        height: 70px;
+    }
+
+    body.mobile-device.landscape-mode .ability-button {
+        width: 60px;
+        height: 60px;
+    }
+
+    .button-icon {
+        width: 32px;
+        height: 32px;
+        margin-bottom: 3px;
+    }
+
+    body.mobile-device.landscape-mode .button-icon {
+        width: 28px;
+        height: 28px;
+        margin-bottom: 2px;
+    }
+
+    .button-label {
+        font-size: 11px;
+    }
+
+    body.mobile-device.landscape-mode .button-label {
+        font-size: 9px;
+    }
+
+    /* Adjust main menu for mobile */
+    body.mobile-device.portrait-mode .instructions {
+        max-height: 58vh; /* Reduced to prevent scrolling */
+        overflow-y: hidden; /* Changed from auto to hidden */
+        margin-top: 0.3rem;
+        padding: 0.6rem;
+        width: 95%;
+        max-width: 500px;
+        background-color: rgba(0, 0, 0, 0.6); /* Slightly more transparent */
+        border: 1px solid rgba(79, 195, 247, 0.4);
+    }
+
+    body.mobile-device.portrait-mode .instructions h3 {
+        margin-top: 0.5rem;
+        margin-bottom: 0.1rem;
+        font-size: 1rem;
+        color: #4fc3f7;
+    }
+
+    body.mobile-device.portrait-mode .instructions h3:first-of-type {
+        margin-top: 0.1rem; /* First header needs less margin */
+    }
+
+    body.mobile-device.portrait-mode .instructions p {
+        margin: 0.1rem 0;
+        line-height: 1.2;
+        font-size: 0.8rem;
+    }
+
+    body.mobile-device.portrait-mode .key {
+        padding: 1px 3px;
+        margin: 0 1px;
+        font-size: 0.7rem;
+        background-color: rgba(79, 195, 247, 0.3);
+        border: 1px solid rgba(79, 195, 247, 0.5);
+    }
+
+    body.mobile-device.portrait-mode .mobile-only {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        margin-top: 0.1rem;
+    }
+
+    body.mobile-device.portrait-mode .mobile-only p {
+        width: 100%;
+        margin: 0.1rem 0;
+        font-size: 0.75rem;
+        line-height: 1.1;
+    }
+
+    /* Make the particles section more compact */
+    body.mobile-device.portrait-mode .instructions h3:nth-of-type(3) {
+        margin-top: 0.3rem;
+    }
+
+    body.mobile-device.portrait-mode .green-dot,
+    body.mobile-device.portrait-mode .red-dot,
+    body.mobile-device.portrait-mode .blue-dot,
+    body.mobile-device.portrait-mode .yellow-dot,
+    body.mobile-device.portrait-mode .dust-dot {
+        width: 8px;
+        height: 8px;
+        margin-right: 3px;
+    }
+
+    /* Tutorial adjustments for mobile portrait */
+    #tutorialContent {
+        width: 95%;
+        max-width: 500px;
+        padding: 1.5rem;
+    }
+
+    .tutorial-step h2 {
+        font-size: 1.5rem;
+        margin-bottom: 0.8rem;
+    }
+
+    .tutorial-step p {
+        font-size: 0.9rem;
+        margin-bottom: 0.8rem;
+    }
+
+    .tutorial-image {
+        height: 150px;
+    }
+
+    .tutorial-controls button {
+        min-width: 100px;
+        padding: 10px 20px;
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    /* Even more compact UI for smaller screens */
+    body.mobile-device #hud {
+        max-width: 45%;
+        top: 5px;
+        left: 5px;
+        gap: 5px;
+    }
+
+    body.mobile-device #game-stats {
+        padding: 4px 6px;
+        font-size: 0.85rem;
+    }
+
+    body.mobile-device #abilities {
+        padding: 4px 6px;
+        gap: 6px;
+        display: none; /* Hide ability indicators in the HUD for mobile */
+    }
+
+    body.mobile-device .ability {
+        min-width: 50px;
+        padding: 4px;
+    }
+
+    body.mobile-device .ability-label {
+        font-size: 0.7rem;
+    }
+
+    /* Smaller ability buttons for small screens */
+    body.mobile-device #ability-buttons {
+        gap: 10px;
+        padding: 8px 12px;
+        bottom: 10px;
+        right: 10px;
+    }
+
+    .ability-button {
+        width: 60px;
+        height: 60px;
+        border-width: 3px;
+    }
+
+    .button-icon {
+        width: 28px;
+        height: 28px;
+        margin-bottom: 2px;
+    }
+
+    .button-label {
+        font-size: 9px;
+    }
+
+    /* Further adjustments for smaller screens */
+    #startScreen h1 {
+        font-size: 1.8rem;
+    }
+
+    .instructions {
+        padding: 0.8rem;
+        max-height: 50vh;
+    }
+
+    .instructions h3 {
+        font-size: 1rem;
+    }
+
+    .instructions p {
+        font-size: 0.9rem;
+        line-height: 1.3;
+    }
+}
+
+.ability-button {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0.8);
+    border: 4px solid #4fc3f7;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0 15px rgba(79, 195, 247, 0.5);
+    pointer-events: auto; /* Ensure it receives mouse events */
+    transform-origin: center;
+}
+
+/* Charge indicator for boost button */
+.charge-indicator {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 24px;
+    height: 24px;
+    background-color: rgba(0, 0, 0, 0.7);
+    border: 2px solid #64b5f6;
+    border-radius: 50%;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    text-shadow: 0 0 3px rgba(0, 0, 0, 0.8);
+    box-shadow: 0 0 5px rgba(100, 181, 246, 0.5);
+}
+
+.charge-indicator.max-charges {
+    background-color: rgba(100, 181, 246, 0.7);
+    border-color: white;
+    animation: pulse-charge 1.5s infinite;
+}
+
+.charge-indicator.no-charges {
+    background-color: rgba(229, 115, 115, 0.7);
+    border-color: #ffcdd2;
+}
+
+@keyframes pulse-charge {
+    0% { transform: scale(1); box-shadow: 0 0 5px rgba(100, 181, 246, 0.5); }
+    50% { transform: scale(1.1); box-shadow: 0 0 10px rgba(100, 181, 246, 0.8); }
+    100% { transform: scale(1); box-shadow: 0 0 5px rgba(100, 181, 246, 0.5); }
+}
+
+.ability-button:hover {
+    transform: scale(1.15);
+    box-shadow: 0 0 20px rgba(79, 195, 247, 0.8);
+}
+
+.ability-button:active {
+    transform: scale(0.9);
+    transition: transform 0.1s ease;
+}
+
+/* Button states */
+.ability-button.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.ability-button.full-power {
+    animation: pulse 1.5s infinite;
+}
+
+.ability-button.active {
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+.ability-button.cooldown {
+    position: relative;
+}
+
+.ability-button.cooldown::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    border-radius: 50%;
+    clip-path: polygon(50% 50%, 50% 0%, 100% 0%, 100% 100%, 0% 100%, 0% 0%, calc(50% - var(--cooldown-percent, 0%)/100*50%) 0%);
+    transform: rotate(-90deg);
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 15px rgba(79, 195, 247, 0.8); }
+    50% { box-shadow: 0 0 25px rgba(79, 195, 247, 1); }
+    100% { box-shadow: 0 0 15px rgba(79, 195, 247, 0.8); }
+}
+
+
+
+.button-icon {
+    width: 45px;
+    height: 45px;
+    margin-bottom: 8px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.7));
+}
+
+.repulsor-icon {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%234fc3f7"><circle cx="12" cy="12" r="8" fill="none" stroke="%234fc3f7" stroke-width="2"/><path d="M7,12 L17,12" stroke="%234fc3f7" stroke-width="2"/></svg>');
+}
+
+.tractor-icon {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%239c27b0"><circle cx="12" cy="12" r="8" fill="none" stroke="%239c27b0" stroke-width="2"/><path d="M7,12 L11,12 M13,12 L17,12 M12,7 L12,11 M12,13 L12,17 M9,9 L11,11 M13,13 L15,15 M9,15 L11,13 M13,11 L15,9" stroke="%239c27b0" stroke-width="2"/></svg>');
+    border-color: #9c27b0;
+}
+
+.boost-icon {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%2364b5f6"><circle cx="12" cy="12" r="8" fill="none" stroke="%2364b5f6" stroke-width="2"/><path d="M12,6 L12,18 M6,12 L18,12 M8,8 L16,16 M8,16 L16,8" stroke="%2364b5f6" stroke-width="2"/></svg>');
+    border-color: #64b5f6;
+}
+
+.button-label {
+    font-size: 14px;
+    color: white;
+    text-align: center;
+    font-weight: bold;
+    text-shadow: 0 0 4px rgba(0, 0, 0, 0.8);
+}
+
+#repulsor-button {
+    border-color: #4fc3f7;
+}
+
+/* Active state for repulsor button */
+#repulsor-button.active {
+    background-color: rgba(79, 195, 247, 0.3);
+    box-shadow: 0 0 15px rgba(79, 195, 247, 0.7);
+    animation: repulsor-active 1s infinite;
+}
+
+@keyframes repulsor-active {
+    0% { box-shadow: 0 0 10px rgba(79, 195, 247, 0.7); }
+    50% { box-shadow: 0 0 20px rgba(79, 195, 247, 0.9); }
+    100% { box-shadow: 0 0 10px rgba(79, 195, 247, 0.7); }
+}
+
+#tractor-button {
+    border-color: #9c27b0;
+    box-shadow: 0 0 15px rgba(156, 39, 176, 0.5);
+}
+
+#tractor-button:hover {
+    box-shadow: 0 0 20px rgba(156, 39, 176, 0.8);
+}
+
+/* Active state for tractor button */
+#tractor-button.active {
+    background-color: rgba(156, 39, 176, 0.3);
+    box-shadow: 0 0 15px rgba(156, 39, 176, 0.7);
+    animation: tractor-active 1s infinite;
+}
+
+@keyframes tractor-active {
+    0% { box-shadow: 0 0 10px rgba(156, 39, 176, 0.7); }
+    50% { box-shadow: 0 0 20px rgba(156, 39, 176, 0.9); }
+    100% { box-shadow: 0 0 10px rgba(156, 39, 176, 0.7); }
+}
+
+#boost-button {
+    border-color: #64b5f6;
+    box-shadow: 0 0 15px rgba(100, 181, 246, 0.5);
+}
+
+#boost-button:hover {
+    box-shadow: 0 0 20px rgba(100, 181, 246, 0.8);
+}
+
+/* Button cooldown overlay */
+.ability-button::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 0%; /* Will be controlled by JS */
+    background-color: rgba(0, 0, 0, 0.5);
+    transition: height 0.1s linear;
+}
+
+.ability-button.cooldown::after {
+    height: var(--cooldown-percent, 0%);
+}
+
+/* Full power state for ability buttons */
+.ability-button.full-power {
+    animation: fullPowerPulse 1.5s infinite;
+}
+
+@keyframes fullPowerPulse {
+    0% { box-shadow: 0 0 5px 0 rgba(255, 255, 255, 0.7); }
+    50% { box-shadow: 0 0 15px 5px rgba(255, 255, 255, 0.7); }
+    100% { box-shadow: 0 0 5px 0 rgba(255, 255, 255, 0.7); }
+}
+
+#repulsor-button.full-power {
+    border-color: #4fc3f7;
+    box-shadow: 0 0 10px rgba(79, 195, 247, 0.7);
+}
+
+#tractor-button.full-power {
+    border-color: #ce93d8;
+    box-shadow: 0 0 10px rgba(156, 39, 176, 0.7);
+}

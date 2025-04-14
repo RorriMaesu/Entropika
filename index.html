@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Entropika - Interactive Game</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="gameOverlay">
+        <div id="startScreen" class="screen">
+            <div class="logo-container">
+                <img src="images/logo.png" alt="Entropika Logo" id="game-logo">
+            </div>
+            <h1>Entropika</h1>
+            <p class="tagline">Master the physics, survive the chaos!</p>
+            <div class="button-container">
+                <button id="startButton">Start Game</button>
+                <button type="button" id="tutorialButton" class="mobile-hidden">Show Tutorial</button>
+            </div>
+            <div class="instructions">
+                <h3>MISSION:</h3>
+                <p>Collect energy particles to power your shield while avoiding enemy particles that drain your energy!</p>
+                <p>Reach 100 energy points to advance to the next sector.</p>
+
+                <h3>CONTROLS:</h3>
+                <!-- Desktop-specific controls -->
+                <div class="desktop-only">
+                    <p><span class="key">W</span><span class="key">A</span><span class="key">S</span><span class="key">D</span> or <span class="key">↑</span><span class="key">←</span><span class="key">↓</span><span class="key">→</span> to move</p>
+                    <p><span class="key">SPACE</span> to activate shield pulse (pushes enemies away)</p>
+                    <p><span class="key">WARP SPEED HAIL MARY</span> button to launch in a random direction (emergency escape)</p>
+                </div>
+
+                <!-- Mobile-specific controls -->
+                <div class="mobile-only">
+                    <p><span class="key">TAP</span> or <span class="key">DRAG</span> to move toward that location (costs energy)</p>
+                    <p>Tap the <span class="key">REPULSOR</span> button to push enemies away</p>
+                    <p>Tap the <span class="key">TRACTOR</span> button to pull particles toward you</p>
+                    <p>Tap the <span class="key">WARP SPEED</span> button to escape in a random direction</p>
+                    <p>Double-tap screen with two fingers to activate shield pulse</p>
+                </div>
+
+                <h3>PARTICLES:</h3>
+                <!-- Desktop-specific particle info -->
+                <div class="desktop-only">
+                    <p><span class="green-dot"></span> Energy particles: +10 energy</p>
+                    <p><span class="red-dot"></span> Enemy particles: -20 energy, -1 shield</p>
+                    <p><span class="blue-dot"></span> Boost particles: Adds one Warp Speed Hail Mary charge</p>
+                    <p><span class="yellow-dot"></span> Shield particles: +1 shield</p>
+                </div>
+
+                <!-- Mobile-specific particle info -->
+                <div class="mobile-only">
+                    <p><span class="green-dot"></span> Energy particles: +5 energy (reduced on mobile)</p>
+                    <p><span class="red-dot"></span> Enemy particles: -20 energy, -1 shield</p>
+                    <p><span class="blue-dot"></span> Boost particles: Adds one Warp Speed Hail Mary charge</p>
+                    <p><span class="yellow-dot"></span> Shield particles: +1 shield</p>
+                    <p><span class="dust-dot"></span> Dust particles: +0.05 energy (tiny amount)</p>
+                </div>
+            </div>
+            <!-- Mobile-only tutorial button at bottom -->
+            <button type="button" id="tutorialButton-mobile" class="desktop-hidden landscape-hidden">Show Tutorial</button>
+        </div>
+
+        <div id="levelCompleteScreen" class="screen">
+            <h1>Level Complete!</h1>
+            <p>Score: <span id="levelScore">0</span></p>
+            <button id="nextLevelButton">Next Level</button>
+        </div>
+
+        <div id="gameOverScreen" class="screen">
+            <h1>Game Over</h1>
+            <p>Energy Depleted!</p>
+            <p>Final Score: <span id="finalScore">0</span></p>
+            <p>Level Reached: <span id="finalLevel">1</span></p>
+            <p>Collect energy particles faster next time!</p>
+            <button id="restartButton">Play Again</button>
+        </div>
+
+        <div id="hud">
+            <!-- Left side: Game stats -->
+            <div id="game-stats">
+                <div id="level">Sector: <span id="levelValue">1</span></div>
+                <div id="score">Energy: <span id="scoreValue">0</span>/100</div>
+                <div id="energyBarContainer">
+                    <div id="energyBar"></div>
+                </div>
+                <div id="lives">Shields: <span id="livesValue">3</span></div>
+            </div>
+
+            <!-- Right side: Ability meters -->
+            <div id="abilities">
+                <div id="shieldPulse" class="ability">
+                    <div class="ability-label">Repulsor</div>
+                    <span id="shieldCooldown" class="cooldown"></span>
+                    <div class="ability-energy-container">
+                        <div id="shieldPulseEnergy" class="ability-energy"></div>
+                    </div>
+                </div>
+                <div id="attractField" class="ability">
+                    <div class="ability-label">Tractor</div>
+                    <span id="attractCooldown" class="cooldown"></span>
+                    <div class="ability-energy-container">
+                        <div id="attractFieldEnergy" class="ability-energy"></div>
+                    </div>
+                </div>
+                <div id="warpBoost" class="ability">
+                    <div class="ability-label">Warp Speed</div>
+                    <span class="charge-display">Charges: <span id="warpCharges">1</span>/<span id="maxWarpCharges">3</span></span>
+                </div>
+                <div id="weaponAbility" class="ability">
+                    <div class="ability-label">Weapon</div>
+                    <span id="weaponStatus" class="duration"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- On-screen ability buttons (moved outside of HUD to ensure they're clickable) -->
+        <div id="ability-buttons">
+            <button id="repulsor-button" class="ability-button">
+                <div class="button-icon repulsor-icon"></div>
+                <div class="button-label">Repulsor</div>
+            </button>
+            <button id="tractor-button" class="ability-button">
+                <div class="button-icon tractor-icon"></div>
+                <div class="button-label">Tractor</div>
+            </button>
+            <button id="boost-button" class="ability-button">
+                <div class="button-icon boost-icon"></div>
+                <div class="button-label">Warp Speed Hail Mary</div>
+            </button>
+        </div>
+
+        <div id="tutorial" class="overlay">
+            <div id="tutorialContent">
+                <div id="tutorialStep1" class="tutorial-step">
+                    <h2>Welcome to Entropika!</h2>
+                    <p>This tutorial will teach you the basics of survival.</p>
+                    <div class="tutorial-controls">
+                        <div></div>
+                        <button type="button" id="tutorial-next-1" onclick="goToStep(2); return false;">Next</button>
+                    </div>
+                </div>
+
+                <div id="tutorialStep2" class="tutorial-step">
+                    <h2>Movement</h2>
+                    <!-- Desktop-specific movement instructions -->
+                    <div class="desktop-only">
+                        <p>Use WASD or arrow keys to navigate through the particle field.</p>
+                    </div>
+
+                    <!-- Mobile-specific movement instructions -->
+                    <div class="mobile-only">
+                        <p>Tap or drag on the screen to move toward that location.</p>
+                        <p>Movement costs energy, so be strategic about where you move!</p>
+                    </div>
+                    <div class="tutorial-image movement"></div>
+                    <div class="tutorial-controls">
+                        <button type="button" id="tutorial-prev-2" onclick="goToStep(1); return false;">Previous</button>
+                        <button type="button" id="tutorial-next-2" onclick="goToStep(3); return false;">Next</button>
+                    </div>
+                </div>
+
+                <div id="tutorialStep3" class="tutorial-step">
+                    <h2>Energy Collection</h2>
+                    <!-- Desktop-specific energy instructions -->
+                    <div class="desktop-only">
+                        <p>Collect green energy particles to power your systems (+10 energy each).</p>
+                        <p>Tiny dust particles also provide a small amount of energy.</p>
+                    </div>
+
+                    <!-- Mobile-specific energy instructions -->
+                    <div class="mobile-only">
+                        <p>Collect green energy particles to power your systems (+5 energy each on mobile).</p>
+                        <p>Tiny dust particles provide very little energy (+0.05 each).</p>
+                        <p>Energy is harder to collect on mobile, so be efficient with your movement!</p>
+                    </div>
+                    <div class="tutorial-image energy"></div>
+                    <div class="tutorial-controls">
+                        <button type="button" id="tutorial-prev-3" onclick="goToStep(2); return false;">Previous</button>
+                        <button type="button" id="tutorial-next-3" onclick="goToStep(4); return false;">Next</button>
+                    </div>
+                </div>
+
+                <div id="tutorialStep4" class="tutorial-step">
+                    <h2>Enemy Avoidance</h2>
+                    <p>Red enemy particles will drain your energy and shields!</p>
+                    <div class="tutorial-image enemies"></div>
+                    <div class="tutorial-controls">
+                        <button type="button" id="tutorial-prev-4" onclick="goToStep(3); return false;">Previous</button>
+                        <button type="button" id="tutorial-next-4" onclick="goToStep(5); return false;">Next</button>
+                    </div>
+                </div>
+
+                <div id="tutorialStep5" class="tutorial-step">
+                    <h2>Special Abilities</h2>
+
+                    <!-- Desktop-specific ability instructions -->
+                    <div class="desktop-only">
+                        <p>Use the <strong>Repulsor</strong> button (or SPACE key) to push particles away. Each blue energy particle fills the meter a little.</p>
+                        <p>Use the <strong>Tractor</strong> button (or C key) to <strong>suck ALL nearby particles toward you</strong> like a magnet (including enemies!). Each purple energy particle fills the meter a little.</p>
+                        <p>You can use abilities with partial energy, but they'll be stronger when the meter is full!</p>
+                        <p>Use the <strong>Warp Speed Hail Mary</strong> button to launch in a random direction as a last resort escape. Each blue boost particle adds one charge.</p>
+                        <p>Press E to fire weapon (when activated).</p>
+                    </div>
+
+                    <!-- Mobile-specific ability instructions -->
+                    <div class="mobile-only">
+                        <p>Tap the <strong>Repulsor</strong> button to push particles away. Each blue energy particle fills the meter a little (but less on mobile).</p>
+                        <p>Tap the <strong>Tractor</strong> button to <strong>suck ALL nearby particles toward you</strong> like a magnet (including enemies!). Each purple energy particle fills the meter a little (but less on mobile).</p>
+                        <p>You can use abilities with partial energy, but they'll be stronger when the meter is full!</p>
+                        <p>Tap the <strong>Warp Speed Hail Mary</strong> button to launch in a random direction as a last resort escape. Each blue boost particle adds one charge.</p>
+                        <p>Double-tap with two fingers to activate shield pulse as an alternative to the Repulsor button.</p>
+                    </div>
+
+                    <p>The buttons at the bottom of the screen show when abilities are ready to use!</p>
+                    <div class="tutorial-image abilities"></div>
+                    <div class="tutorial-controls">
+                        <button type="button" id="tutorial-prev-5" onclick="goToStep(4); return false;">Previous</button>
+                        <button type="button" id="tutorial-next-5" onclick="goToStep(6); return false;">Next</button>
+                    </div>
+                </div>
+
+                <div id="tutorialStep6" class="tutorial-step">
+                    <h2>Power-ups</h2>
+                    <div class="content-wrapper">
+                        <p>Light blue particles add one Warp Speed Hail Mary charge (max 3).</p>
+                        <p>Yellow particles restore shields.</p>
+                        <p>Purple particles give temporary weapon power.</p>
+                        <p>Blue particles add to your repulsor (shield pulse) energy meter.</p>
+                        <p>Dark purple particles add to your tractor beam energy meter.</p>
+                        <p>Collect multiple energy particles to fill your ability meters completely!</p>
+                    </div>
+                    <div class="tutorial-image powerups"></div>
+                    <div class="tutorial-controls">
+                        <button type="button" id="tutorial-prev-6" onclick="goToStep(5); return false;">Previous</button>
+                        <button type="button" id="tutorial-next-6" onclick="goToStep(7); return false;">Next</button>
+                    </div>
+                </div>
+
+                <div id="tutorialStep7" class="tutorial-step">
+                    <h2>Ready to Play?</h2>
+
+                    <!-- Desktop-specific final instructions -->
+                    <div class="desktop-only">
+                        <p>You start with very little energy! Collect green particles quickly to survive.</p>
+                        <p>Reach 100 energy to advance to the next sector!</p>
+                        <p>Be careful - movement costs energy, and enemies get smarter and more aggressive as you progress!</p>
+                        <p>Collect power-ups to help you survive the increasingly difficult sectors.</p>
+                    </div>
+
+                    <!-- Mobile-specific final instructions -->
+                    <div class="mobile-only">
+                        <p>You start with very little energy! Collect green particles quickly to survive.</p>
+                        <p>Reach 100 energy to advance to the next sector!</p>
+                        <p>On mobile, you get less energy per particle and movement is slower!</p>
+                        <p>Be very careful with your energy usage - movement costs energy, and enemies get smarter and more aggressive as you progress!</p>
+                        <p>Use the tractor beam to pull in particles without moving to conserve energy.</p>
+                    </div>
+                    <div class="tutorial-controls">
+                        <button type="button" id="tutorial-prev-7" onclick="goToStep(6); return false;">Previous</button>
+                        <button type="button" id="tutorial-finish" onclick="finishTutorial(); return false;">Start Game</button>
+                    </div>
+                </div>
+
+                <div id="tutorialProgress">Step 1 of 7</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <canvas id="particleCanvas"></canvas>
+
+        <div class="controls">
+            <h2>Game Settings</h2>
+
+            <div class="control-group">
+                <label for="particleCount">Particle Count:</label>
+                <input type="range" id="particleCount" min="100" max="5000" value="1000" step="100">
+                <span id="particleCountValue">1000</span>
+            </div>
+
+            <div class="control-group">
+                <label for="particleSpeed">Speed:</label>
+                <input type="range" id="particleSpeed" min="0.1" max="5" value="1" step="0.1">
+                <span id="particleSpeedValue">1</span>
+            </div>
+
+            <div class="control-group">
+                <label for="interactionRadius">Interaction Radius:</label>
+                <input type="range" id="interactionRadius" min="10" max="200" value="50" step="5">
+                <span id="interactionRadiusValue">50</span>
+            </div>
+
+            <div class="control-group">
+                <label for="behaviorSelect">Behavior:</label>
+                <select id="behaviorSelect">
+                    <option value="flock">Flocking</option>
+                    <option value="gravity">Gravity</option>
+                    <option value="swirl">Swirling</option>
+                    <option value="random">Random</option>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label for="mouseInteraction">Mouse Interaction:</label>
+                <select id="mouseInteraction">
+                    <option value="attract">Attract</option>
+                    <option value="repel">Repel</option>
+                    <option value="force">Create Force</option>
+                    <option value="none">None</option>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label for="colorScheme">Color Scheme:</label>
+                <select id="colorScheme">
+                    <option value="rainbow">Rainbow</option>
+                    <option value="monochrome">Monochrome</option>
+                    <option value="gradient">Gradient</option>
+                    <option value="velocity">Velocity-based</option>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label for="difficultySelect">Difficulty:</label>
+                <select id="difficultySelect">
+                    <option value="easy">Easy</option>
+                    <option value="medium" selected>Medium</option>
+                    <option value="hard">Hard</option>
+                </select>
+            </div>
+
+            <button id="resetButton">Reset Game</button>
+        </div>
+    </div>
+
+    <!-- Audio elements -->
+    <audio id="alertSound" preload="auto" src="sounds/alert.mp3"></audio>
+    <audio id="boostSound" preload="auto" src="sounds/boost.mp3"></audio>
+
+    <!-- Handle device orientation for responsive UI - load first to ensure device detection is available -->
+    <script src="js/orientation.js"></script>
+
+    <script src="js/particle.js"></script>
+    <script src="js/particleSystem.js"></script>
+    <script src="js/behaviors.js"></script>
+    <script src="js/player.js"></script>
+    <script src="js/game.js"></script>
+    <!-- Load main.js to create the game object -->
+    <script src="js/main.js"></script>
+    <!-- Then load tutorial scripts that depend on the game object -->
+    <script src="js/tutorial.js"></script>
+    <script src="js/tutorial-debug.js"></script>
+</body>
+</html>
