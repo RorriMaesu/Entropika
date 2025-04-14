@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, maximum-scale=1.0, user-scalable=no">
     <title>Entropika - Interactive Game</title>
     <link rel="stylesheet" href="styles.css">
 </head>
@@ -18,6 +18,14 @@
                 <button id="startButton">Start Game</button>
                 <button type="button" id="tutorialButton" class="mobile-hidden">Show Tutorial</button>
             </div>
+            
+            <!-- Support button with image - universal for all modes -->
+            <div class="support-button-container">
+                <a href="https://buymeacoffee.com/rorrimaesu" target="_blank" rel="noopener noreferrer" class="support-button">
+                    <img src="images/capitalismsucksbutiamsuperpassionateaboutbeingabletoaffordfood.png" alt="Support the Developer" class="support-image">
+                </a>
+            </div>
+            
             <div class="instructions">
                 <h3>MISSION:</h3>
                 <p>Collect energy particles to power your shield while avoiding enemy particles that drain your energy!</p>
@@ -66,6 +74,13 @@
             <h1>Level Complete!</h1>
             <p>Score: <span id="levelScore">0</span></p>
             <button id="nextLevelButton">Next Level</button>
+            
+            <!-- Support button in level complete screen -->
+            <div class="support-button-container">
+                <a href="https://buymeacoffee.com/rorrimaesu" target="_blank" rel="noopener noreferrer" class="support-button">
+                    <img src="images/capitalismsucksbutiamsuperpassionateaboutbeingabletoaffordfood.png" alt="Support the Developer" class="support-image">
+                </a>
+            </div>
         </div>
 
         <div id="gameOverScreen" class="screen">
@@ -75,6 +90,13 @@
             <p>Level Reached: <span id="finalLevel">1</span></p>
             <p>Collect energy particles faster next time!</p>
             <button id="restartButton">Play Again</button>
+            
+            <!-- Support button in game over screen -->
+            <div class="support-button-container">
+                <a href="https://buymeacoffee.com/rorrimaesu" target="_blank" rel="noopener noreferrer" class="support-button">
+                    <img src="images/capitalismsucksbutiamsuperpassionateaboutbeingabletoaffordfood.png" alt="Support the Developer" class="support-image">
+                </a>
+            </div>
         </div>
 
         <div id="hud">

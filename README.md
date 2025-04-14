@@ -54,6 +54,14 @@ git clone https://github.com/RorriMaesu/Entropika.git
 cd Entropika
 ```
 
+## Support the Developer
+
+If you enjoy Entropika and would like to support its development, you can buy the developer a coffee:
+
+<a href="https://buymeacoffee.com/rorrimaesu" target="_blank">
+  <img src="images/capitalismsucksbutiamsuperpassionateaboutbeingabletoaffordfood.png" alt="Support the Developer" width="200">
+</a>
+
 ## License
 
 This project is open-source and available under the MIT License.

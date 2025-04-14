@@ -1714,6 +1714,7 @@ body.landscape-mode .landscape-hidden {
         background-color: rgba(0, 0, 0, 0.6);
         border: 1px solid rgba(79, 195, 247, 0.4);
         float: right;
+        margin-right: 120px; /* Make space for the button on the right side */
     }
 
     /* Adjust mission section to be more compact */
@@ -2723,4 +2724,100 @@ body.mobile-device.landscape-mode #abilities {
 #tractor-button.full-power {
     border-color: #ce93d8;
     box-shadow: 0 0 10px rgba(156, 39, 176, 0.7);
+}
+
+/* Support button container styles */
+.support-button-container {
+    margin: 15px auto;
+    text-align: center;
+    max-width: 250px;
+    transition: all 0.3s ease;
+}
+
+.support-button {
+    display: inline-block;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(79, 195, 247, 0.7);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.support-button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(79, 195, 247, 1);
+}
+
+.support-button:active {
+    transform: scale(0.98);
+}
+
+.support-image {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+/* Desktop-specific support button styles */
+body.desktop-device .support-button-container {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    margin: 0;
+    max-width: 200px;
+    z-index: 25;
+    display: flex;
+    justify-content: flex-end;
+}
+
+/* Make the image smaller for desktop */
+body.desktop-device .support-image {
+    max-width: 100%;
+    width: 180px; /* Slightly smaller width */
+}
+
+/* Adjust positioning for the desktop version of the game screens */
+body.desktop-device .screen .support-button-container {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    margin: 0;
+}
+
+/* Mobile portrait-specific support button styles */
+body.mobile-device.portrait-mode .support-button-container {
+    margin: 12px auto;
+    max-width: 200px;
+}
+
+/* Mobile landscape-specific support button styles - FIXED POSITIONING */
+body.mobile-device.landscape-mode .support-button-container {
+    position: absolute;
+    top: 50px; /* Increased from 10px to move it down below the tagline */
+    right: 10px;
+    margin: 0;
+    max-width: 100px;
+    z-index: 25;
+}
+
+/* Reduced size for landscape mobile specifically */
+body.mobile-device.landscape-mode .support-button {
+    border-radius: 6px;
+    box-shadow: 0 0 6px rgba(79, 195, 247, 0.5);
+}
+
+/* Ensure support button is properly positioned in all screens */
+#levelCompleteScreen .support-button-container,
+#gameOverScreen .support-button-container {
+    margin-top: 20px;
+}
+
+/* Adjust level complete and game over screens for landscape mode */
+body.mobile-device.landscape-mode #levelCompleteScreen .support-button-container,
+body.mobile-device.landscape-mode #gameOverScreen .support-button-container {
+    position: absolute;
+    right: 10px;
+    top: auto;
+    bottom: 10px;
+    max-width: 120px;
 }
